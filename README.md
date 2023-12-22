@@ -4,9 +4,9 @@ Le projet "Moodly" est une application web conçue avec Vue.js et Capacitor.js q
 
 ## Preview
 
-![alt text](https://zupimages.net/up/23/51/58bq.png)
-![alt text](https://zupimages.net/up/23/51/58bq.png)
-![alt text](https://zupimages.net/up/23/51/58bq.png)
+![alt text](https://zupimages.net/up/23/51/58bq.png | width=100)
+![alt text](https://zupimages.net/up/23/51/58bq.png | width=100)
+![alt text](https://zupimages.net/up/23/51/58bq.png | width=100)
 
 ## Main technologies used
 
