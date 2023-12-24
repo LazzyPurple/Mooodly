@@ -1,26 +1,64 @@
 <template>
-  <div class="chart-container">
-    <bar-chart :chart-data="chartData" :options="chartOptions"/>
+  <div>
+    <canvas ref="barChart"></canvas>
   </div>
 </template>
 
 <script>
-import { Bar, mixins } from 'vue-chart.js';
-const { reactiveProp } = mixins;
+import { defineComponent, onMounted, ref, watch, toRefs } from 'vue';
+import { Chart, registerables } from 'chart.js';
 
-export default {
-  extends: Bar,
-  mixins: [reactiveProp],
-  props: ['chartData', 'options'],
-  mounted() {
-    this.renderChart(this.chartData, this.options);
+Chart.register(...registerables);
+
+export default defineComponent({
+  name: 'BarChart',
+  props: {
+    chartData: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
+    const { chartData } = toRefs(props);
+    const barChart = ref(null);
+    let myChart = null;
+
+    const createGradient = (ctx, area) => {
+      const gradient = ctx.createLinearGradient(0, 0, area.width, 0);
+      gradient.addColorStop(0, '#B05DA3');
+      gradient.addColorStop(1, '#785DB0');
+      return gradient;
+    };
+
+    onMounted(() => {
+      const context = barChart.value.getContext('2d');
+      const gradient = createGradient(context, barChart.value);
+
+      props.chartData.datasets.forEach(dataset => {
+        dataset.backgroundColor = gradient;
+      });
+
+      myChart = new Chart(context, {
+        type: 'bar',
+        data: chartData.value,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    });
+
+    watch(chartData, (newData) => {
+      myChart.data = newData;
+      myChart.update();
+    });
+
+    return {
+      barChart
+    };
   }
-}
+});
 </script>
-
-<style scoped>
-.chart-container {
-  width: 100%;
-  height: 500px; /* or the height you want */
-}
-</style>
